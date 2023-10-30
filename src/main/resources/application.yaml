@@ -1,0 +1,4 @@
+ci-cd:
+  agent: Jenkins
+  version: 2.414.3
+  cloud: AWS-EC2
