@@ -1,34 +1,46 @@
-Pipeline {
-    Agent: any
+pipeline {
+    agent: any
 
-    Tools {
-        Maven 'maven3'
+    environment {
+        APP_NAME = 'Jenkins Demo Pipeline'
     }
 
-    Stages {
-        Stage('Code Checkout') {
-            Steps {
-                Checkout([
+    stages {
+        stage('Cleanup Workspace') {
+            steps {
+                cleanWs()
+                sh 'echo "Cleaned Up Workspace for ${APP_NAME}"'
+            }
+        }
+
+        stage('Checkout') {
+            steps {
+                checkout([
                     $class: 'GitSCM',
-                    Branches: [[name: '*/master']],
-                    UserRemoteConfigs: [[url: 'https://github.com/spring-projects/spring-petclinic.git']]
+                    branches: [[name: '*/master']],
+                    userRemoteConfigs: [[url: 'https://github.com/Gtomika/jenkins-pipeline.git']]
                 ])
+                sh 'echo "Checked out app ${APP_NAME}"'
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Building..'
+                sh 'mvn install -Dmaven.test.skip=true'
+                sh 'echo "Build completed for app ${APP_NAME}"'
             }
         }
+
         stage('Test') {
             steps {
-                echo 'Testing..'
+                sh 'mvn test'
+                sh 'echo "Tests completed for app ${APP_NAME}"'
             }
         }
+
         stage('Deploy') {
             steps {
-                echo 'Deploying.... TODO'
+                sh 'echo "Deploying...."'
             }
         }
     }
