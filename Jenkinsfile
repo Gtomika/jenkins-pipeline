@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        //Jenkins should have this label configured
+        //agents with this label should have maven and Java 21 installed
+        label 'amazon-linux-maven-java-21'
+    }
 
     environment {
         APP_NAME = 'Jenkins Demo Pipeline'
